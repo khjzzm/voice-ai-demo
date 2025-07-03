@@ -371,6 +371,9 @@
         <div class="header">
             <h1>Voice AI Demo</h1>
             <p>ElevenLabs API를 사용한 음성 학습 및 TTS 서비스</p>
+            <div style="background: #e3f2fd; border: 2px solid #2196f3; border-radius: 8px; padding: 15px; margin-top: 15px; font-size: 14px; color: #1565c0;">
+                <strong style="color: #0d47a1;">🎤 마이크 권한 안내:</strong> Chrome에서 마이크 권한이 필요하면 <strong style="color: #d32f2f;">chrome://flags/#unsafely-treat-insecure-origin-as-secure</strong>에서 <strong style="color: #d32f2f;">http://61.80.148.182:8080/</strong>을 추가하세요.
+            </div>
         </div>
 
         <div class="content">
@@ -981,7 +984,7 @@
                 recordingTimer = setInterval(updateRecordingTime, 1000);
                 
             } catch (error) {
-                alert('마이크 권한이 필요합니다. 브라우저에서 마이크 접근을 허용해주세요.');
+                alert('마이크 권한이 필요합니다!\n\n해결 방법:\n1. chrome://flags/#unsafely-treat-insecure-origin-as-secure 접속\n2. "Insecure origins treated as secure" 설정을 "Enabled"로 변경\n3. "Add" 버튼 클릭 후 "http://61.80.148.182:8080/" 추가\n4. Chrome 재시작 후 다시 시도하세요');
                 console.error('녹음 시작 실패:', error);
             }
         });

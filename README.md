@@ -50,6 +50,30 @@ This project is a Spring Boot application that demonstrates how to use the Eleve
     ```
     The application will start on `http://localhost:8080`.
 
+## Microphone Access Setup
+
+This application requires microphone access for voice recording features. To enable microphone access in Chrome:
+
+### Method 1: Chrome Flags (Recommended for Development)
+
+1. **Open Chrome flags:** Navigate to `chrome://flags/#unsafely-treat-insecure-origin-as-secure`
+2. **Enable the setting:** Set "Insecure origins treated as secure" to "Enabled"
+3. **Add localhost:** Click "Add" and enter `http://localhost:8080`
+4. **Restart Chrome:** Click "Relaunch" to apply changes
+5. **Allow microphone access:** When prompted, allow the browser to access your microphone
+
+### Method 2: HTTPS Setup (Alternative)
+
+If you prefer HTTPS, uncomment the SSL settings in `application.properties` and access via `https://localhost:8443`.
+
+### Troubleshooting Microphone Issues
+
+If you encounter microphone permission issues:
+
+- **Check Chrome flags:** Ensure localhost is added to the secure origins list
+- **Check browser settings:** Go to your browser's site settings and ensure microphone access is allowed for localhost
+- **Clear browser cache:** Sometimes clearing the browser cache can resolve permission issues
+
 ## API Endpoints
 
 The following endpoints are available:
