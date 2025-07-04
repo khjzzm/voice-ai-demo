@@ -70,10 +70,44 @@ public class ElevenLabsService {
     }
 
     /**
-     * TTS 생성 (학습된 목소리로 텍스트를 음성으로 변환)
+     * TTS 생성 (학습된 목소리로 텍스트를 음성으로 변환) - 고급 옵션 지원
      */
-    public byte[] generateSpeech(String voiceId, String text) {
+    public byte[] generateSpeech(String voiceId, String text, Map<String, Object> options) {
         String url = config.getBaseUrl() + "/text-to-speech/" + voiceId;
+        
+        // 쿼리 파라미터 처리
+        StringBuilder urlBuilder = new StringBuilder(url);
+        boolean firstParam = true;
+        
+        if (options.containsKey("enable_logging")) {
+            urlBuilder.append(firstParam ? "?" : "&").append("enable_logging=").append(options.get("enable_logging"));
+            firstParam = false;
+        }
+        
+        if (options.containsKey("optimize_streaming_latency")) {
+            urlBuilder.append(firstParam ? "?" : "&").append("optimize_streaming_latency=").append(options.get("optimize_streaming_latency"));
+            firstParam = false;
+        }
+        
+        if (options.containsKey("output_format")) {
+            urlBuilder.append(firstParam ? "?" : "&").append("output_format=").append(options.get("output_format"));
+            firstParam = false;
+        }
+        
+        if (options.containsKey("apply_text_normalization")) {
+            urlBuilder.append(firstParam ? "?" : "&").append("apply_text_normalization=").append(options.get("apply_text_normalization"));
+            firstParam = false;
+        }
+        
+        if (options.containsKey("apply_language_text_normalization")) {
+            urlBuilder.append(firstParam ? "?" : "&").append("apply_language_text_normalization=").append(options.get("apply_language_text_normalization"));
+            firstParam = false;
+        }
+        
+        if (options.containsKey("use_pvc_as_ivc")) {
+            urlBuilder.append(firstParam ? "?" : "&").append("use_pvc_as_ivc=").append(options.get("use_pvc_as_ivc"));
+            firstParam = false;
+        }
         
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -81,23 +115,79 @@ public class ElevenLabsService {
 
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("text", text);
-        requestBody.put("model_id", "eleven_multilingual_v2");
         
-        Map<String, Object> voiceSettings = new HashMap<>();
-        voiceSettings.put("stability", 0.5);
-        voiceSettings.put("similarity_boost", 0.5);
-        requestBody.put("voice_settings", voiceSettings);
+        // 기본값 설정
+        requestBody.put("model_id", options.getOrDefault("model_id", "eleven_multilingual_v2"));
+        
+        // 선택적 파라미터들
+        if (options.containsKey("language_code")) {
+            requestBody.put("language_code", options.get("language_code"));
+        }
+        
+        if (options.containsKey("voice_settings")) {
+            requestBody.put("voice_settings", options.get("voice_settings"));
+        } else {
+            // 기본 voice settings
+            Map<String, Object> voiceSettings = new HashMap<>();
+            voiceSettings.put("stability", options.getOrDefault("stability", 0.5));
+            voiceSettings.put("similarity_boost", options.getOrDefault("similarity_boost", 0.5));
+            voiceSettings.put("style", options.getOrDefault("style", 0.0));
+            voiceSettings.put("use_speaker_boost", options.getOrDefault("use_speaker_boost", true));
+            requestBody.put("voice_settings", voiceSettings);
+        }
+        
+        if (options.containsKey("pronunciation_dictionary_locators")) {
+            requestBody.put("pronunciation_dictionary_locators", options.get("pronunciation_dictionary_locators"));
+        }
+        
+        if (options.containsKey("seed")) {
+            requestBody.put("seed", options.get("seed"));
+        }
+        
+        if (options.containsKey("previous_text")) {
+            requestBody.put("previous_text", options.get("previous_text"));
+        }
+        
+        if (options.containsKey("next_text")) {
+            requestBody.put("next_text", options.get("next_text"));
+        }
+        
+        if (options.containsKey("previous_request_ids")) {
+            requestBody.put("previous_request_ids", options.get("previous_request_ids"));
+        }
+        
+        if (options.containsKey("next_request_ids")) {
+            requestBody.put("next_request_ids", options.get("next_request_ids"));
+        }
 
         HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
         
         ResponseEntity<byte[]> response = elevenLabsRestTemplate.exchange(
-                url, HttpMethod.POST, requestEntity, byte[].class);
+                urlBuilder.toString(), HttpMethod.POST, requestEntity, byte[].class);
         
         if (response.getStatusCode() == HttpStatus.OK) {
             return response.getBody();
         } else {
             throw new RuntimeException("TTS 생성 실패: " + response.getStatusCode());
         }
+    }
+
+    /**
+     * TTS 생성 (기본 옵션) - 기존 호환성 유지
+     */
+    public byte[] generateSpeech(String voiceId, String text) {
+        Map<String, Object> options = new HashMap<>();
+        options.put("model_id", "eleven_multilingual_v2");
+        options.put("stability", 0.5);
+        options.put("similarity_boost", 0.5);
+        options.put("style", 0.0);
+        options.put("use_speaker_boost", true);
+        options.put("enable_logging", true);
+        options.put("output_format", "mp3_44100_128");
+        options.put("apply_text_normalization", "auto");
+        options.put("apply_language_text_normalization", false);
+        
+        return generateSpeech(voiceId, text, options);
     }
 
     /**

@@ -53,15 +53,47 @@ public class VoiceController {
     }
 
     /**
-     * TTS 생성 (학습된 목소리로 텍스트를 음성으로 변환)
+     * TTS 생성 (학습된 목소리로 텍스트를 음성으로 변환) - 고급 옵션 지원
      */
     @PostMapping("/generate-speech")
     public ResponseEntity<Map<String, Object>> generateSpeech(
             @RequestParam("voiceId") String voiceId,
-            @RequestParam("text") String text) {
+            @RequestParam("text") String text,
+            @RequestParam(value = "modelId", required = false) String modelId,
+            @RequestParam(value = "languageCode", required = false) String languageCode,
+            @RequestParam(value = "stability", required = false) Double stability,
+            @RequestParam(value = "similarityBoost", required = false) Double similarityBoost,
+            @RequestParam(value = "style", required = false) Double style,
+            @RequestParam(value = "useSpeakerBoost", required = false) Boolean useSpeakerBoost,
+            @RequestParam(value = "outputFormat", required = false) String outputFormat,
+            @RequestParam(value = "enableLogging", required = false) Boolean enableLogging,
+            @RequestParam(value = "optimizeStreamingLatency", required = false) Integer optimizeStreamingLatency,
+            @RequestParam(value = "applyTextNormalization", required = false) String applyTextNormalization,
+            @RequestParam(value = "applyLanguageTextNormalization", required = false) Boolean applyLanguageTextNormalization,
+            @RequestParam(value = "seed", required = false) Integer seed,
+            @RequestParam(value = "previousText", required = false) String previousText,
+            @RequestParam(value = "nextText", required = false) String nextText) {
         
         try {
-            byte[] audioData = elevenLabsService.generateSpeech(voiceId, text);
+            Map<String, Object> options = new HashMap<>();
+            
+            // 기본 옵션들
+            if (modelId != null) options.put("model_id", modelId);
+            if (languageCode != null) options.put("language_code", languageCode);
+            if (stability != null) options.put("stability", stability);
+            if (similarityBoost != null) options.put("similarity_boost", similarityBoost);
+            if (style != null) options.put("style", style);
+            if (useSpeakerBoost != null) options.put("use_speaker_boost", useSpeakerBoost);
+            if (outputFormat != null) options.put("output_format", outputFormat);
+            if (enableLogging != null) options.put("enable_logging", enableLogging);
+            if (optimizeStreamingLatency != null) options.put("optimize_streaming_latency", optimizeStreamingLatency);
+            if (applyTextNormalization != null) options.put("apply_text_normalization", applyTextNormalization);
+            if (applyLanguageTextNormalization != null) options.put("apply_language_text_normalization", applyLanguageTextNormalization);
+            if (seed != null) options.put("seed", seed);
+            if (previousText != null) options.put("previous_text", previousText);
+            if (nextText != null) options.put("next_text", nextText);
+            
+            byte[] audioData = elevenLabsService.generateSpeech(voiceId, text, options);
             
             // Base64로 인코딩하여 URL 형태로 제공
             String base64Audio = java.util.Base64.getEncoder().encodeToString(audioData);
@@ -72,6 +104,7 @@ public class VoiceController {
             response.put("audioUrl", dataUrl);
             response.put("audioData", base64Audio);
             response.put("message", "음성이 성공적으로 생성되었습니다.");
+            response.put("options", options);
             
             return ResponseEntity.ok(response);
         } catch (Exception e) {
@@ -84,16 +117,48 @@ public class VoiceController {
     }
 
     /**
-     * TTS 생성 - 파일 다운로드용
+     * TTS 생성 - 파일 다운로드용 (고급 옵션 지원)
      */
     @PostMapping("/generate-speech-download")
     public ResponseEntity<byte[]> generateSpeechDownload(
             @RequestParam("voiceId") String voiceId,
             @RequestParam("text") String text,
-            @RequestParam(value = "filename", defaultValue = "speech.mp3") String filename) {
+            @RequestParam(value = "filename", defaultValue = "speech.mp3") String filename,
+            @RequestParam(value = "modelId", required = false) String modelId,
+            @RequestParam(value = "languageCode", required = false) String languageCode,
+            @RequestParam(value = "stability", required = false) Double stability,
+            @RequestParam(value = "similarityBoost", required = false) Double similarityBoost,
+            @RequestParam(value = "style", required = false) Double style,
+            @RequestParam(value = "useSpeakerBoost", required = false) Boolean useSpeakerBoost,
+            @RequestParam(value = "outputFormat", required = false) String outputFormat,
+            @RequestParam(value = "enableLogging", required = false) Boolean enableLogging,
+            @RequestParam(value = "optimizeStreamingLatency", required = false) Integer optimizeStreamingLatency,
+            @RequestParam(value = "applyTextNormalization", required = false) String applyTextNormalization,
+            @RequestParam(value = "applyLanguageTextNormalization", required = false) Boolean applyLanguageTextNormalization,
+            @RequestParam(value = "seed", required = false) Integer seed,
+            @RequestParam(value = "previousText", required = false) String previousText,
+            @RequestParam(value = "nextText", required = false) String nextText) {
         
         try {
-            byte[] audioData = elevenLabsService.generateSpeech(voiceId, text);
+            Map<String, Object> options = new HashMap<>();
+            
+            // 기본 옵션들
+            if (modelId != null) options.put("model_id", modelId);
+            if (languageCode != null) options.put("language_code", languageCode);
+            if (stability != null) options.put("stability", stability);
+            if (similarityBoost != null) options.put("similarity_boost", similarityBoost);
+            if (style != null) options.put("style", style);
+            if (useSpeakerBoost != null) options.put("use_speaker_boost", useSpeakerBoost);
+            if (outputFormat != null) options.put("output_format", outputFormat);
+            if (enableLogging != null) options.put("enable_logging", enableLogging);
+            if (optimizeStreamingLatency != null) options.put("optimize_streaming_latency", optimizeStreamingLatency);
+            if (applyTextNormalization != null) options.put("apply_text_normalization", applyTextNormalization);
+            if (applyLanguageTextNormalization != null) options.put("apply_language_text_normalization", applyLanguageTextNormalization);
+            if (seed != null) options.put("seed", seed);
+            if (previousText != null) options.put("previous_text", previousText);
+            if (nextText != null) options.put("next_text", nextText);
+            
+            byte[] audioData = elevenLabsService.generateSpeech(voiceId, text, options);
             
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);

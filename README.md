@@ -81,7 +81,7 @@ The following endpoints are available:
 - `POST /api/voice/create-model`: Create a new voice model.
 - `POST /api/voice/generate-speech`: Generate speech from text.
 - `POST /api/voice/generate-speech-download`: Generate and download speech as a file.
-- `GET /api/voice/voices`: Get a list of available voices.
+- `GET /api/voice/voices`: Get a list of available voices
 - `GET /api/voice/user-voices`: Get a list of user-created voices.
 - `GET /api/voice/history`: Get the TTS generation history.
 - `DELETE /api/voice/history/{historyItemId}`: Delete a specific TTS item.

@@ -435,52 +435,148 @@
                 <div id="default-tts-tab" class="tab-content">
                     <div class="section full-width">
                         <h2>기본 음성 TTS 테스트</h2>
-                        
                         <p style="color: #666; margin-bottom: 20px;">ElevenLabs에서 제공하는 모든 음성들로 TTS를 바로 테스트해보세요!</p>
-                            
-                            <!-- TTS 팁 박스 -->
-                            <div style="background: #fff3e0; border: 1px solid #ff9800; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
-                                <h4 style="color: #f57c00; margin: 0 0 10px 0;">💡 TTS 생성 팁</h4>
-                                <div style="font-size: 14px; color: #333;">
-                                    <p style="margin: 5px 0;"><strong>🎯 효과적인 TTS를 위한 팁:</strong></p>
-                                    <ul style="margin: 5px 0; padding-left: 20px;">
-                                        <li>문장 끝에 마침표(.)를 넣으면 자연스러운 휴식</li>
-                                        <li>긴 문장은 쉼표(,)로 구분하면 더 자연스러움</li>
-                                        <li>한글과 영어를 혼용해도 잘 작동합니다</li>
-                                        <li>감정을 표현하려면 느낌표(!) 사용</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            
-                            <form id="defaultVoiceForm">
-                                <div class="form-group">
-                                    <label for="defaultVoiceSelect">음성 선택:</label>
-                                    <select id="defaultVoiceSelect" name="defaultVoiceId" required style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px;">
-                                        <option value="">음성을 선택하세요...</option>
-                                    </select>
-                                    <small style="color: #666; font-size: 12px;">기본 제공 음성과 내가 생성한 음성 모두 사용 가능합니다!</small>
-                                </div>
-                                <div class="form-group">
-                                    <label for="defaultTextToSpeech">변환할 텍스트:</label>
-                                    <textarea id="defaultTextToSpeech" name="text" placeholder="음성으로 변환할 텍스트를 입력하세요 (예: 안녕하세요! 오늘 날씨가 정말 좋네요.)" required></textarea>
-                                    <small style="color: #666; font-size: 12px;">한글, 영어 모두 지원됩니다. 문장 부호를 활용하면 더 자연스러운 음성이 생성됩니다.</small>
-                                </div>
-                                <div class="form-group">
-                                    <label for="defaultFilename">파일명 (선택사항):</label>
-                                    <input type="text" id="defaultFilename" name="filename" placeholder="예: my_speech.mp3" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px;">
-                                    <small style="color: #666; font-size: 12px;">파일명을 지정하지 않으면 기본값으로 저장됩니다.</small>
-                                </div>
-                                <button type="submit" class="btn">선택한 음성으로 TTS 생성</button>
-                            </form>
-                            <div id="defaultVoiceResult" class="result"></div>
-                            <audio id="defaultGeneratedAudio" controls style="display: none; width: 100%; margin-top: 20px;"></audio>
-                            <div id="defaultAudioUrl" style="display: none; margin-top: 20px;">
-                                <h4>🎵 생성된 음성 URL:</h4>
-                                <input type="text" id="defaultAudioUrlInput" readonly style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; background: #f9f9f9; font-size: 12px;">
-                                <button onclick="copyToClipboard('defaultAudioUrlInput')" class="btn" style="margin-top: 10px; padding: 8px 16px; font-size: 14px;">URL 복사</button>
-                                <button onclick="downloadDefaultAudio()" class="btn" style="margin-top: 10px; margin-left: 10px; padding: 8px 16px; font-size: 14px; background: #28a745;">MP3 다운로드</button>
+                        <!-- TTS 팁 박스 -->
+                        <div style="background: #fff3e0; border: 1px solid #ff9800; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+                            <h4 style="color: #f57c00; margin: 0 0 10px 0;">💡 TTS 생성 팁</h4>
+                            <div style="font-size: 14px; color: #333;">
+                                <p style="margin: 5px 0;"><strong>🎯 효과적인 TTS를 위한 팁:</strong></p>
+                                <ul style="margin: 5px 0; padding-left: 20px;">
+                                    <li>문장 끝에 마침표(.)를 넣으면 자연스러운 휴식</li>
+                                    <li>긴 문장은 쉼표(,)로 구분하면 더 자연스러움</li>
+                                    <li>한글과 영어를 혼용해도 잘 작동합니다</li>
+                                    <li>감정을 표현하려면 느낌표(!) 사용</li>
+                                </ul>
                             </div>
                         </div>
+                        <form id="defaultVoiceForm">
+                            <div class="form-group">
+                                <label for="defaultVoiceSelect">음성 선택:</label>
+                                <select id="defaultVoiceSelect" name="defaultVoiceId" required style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px;">
+                                    <option value="">음성을 선택하세요...</option>
+                                </select>
+                                <small style="color: #666; font-size: 12px;">기본 제공 음성과 내가 생성한 음성 모두 사용 가능합니다!</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="defaultTextToSpeech">변환할 텍스트:</label>
+                                <textarea id="defaultTextToSpeech" name="text" placeholder="음성으로 변환할 텍스트를 입력하세요 (예: 안녕하세요! 오늘 날씨가 정말 좋네요.)" required></textarea>
+                                <small style="color: #666; font-size: 12px;">한글, 영어 모두 지원됩니다. 문장 부호를 활용하면 더 자연스러운 음성이 생성됩니다.</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="defaultFilename">파일명 (선택사항):</label>
+                                <input type="text" id="defaultFilename" name="filename" placeholder="예: my_speech.mp3" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px;">
+                                <small style="color: #666; font-size: 12px;">파일명을 지정하지 않으면 기본값으로 저장됩니다.</small>
+                            </div>
+                            <!-- 고급 옵션 영역 -->
+                            <div class="form-group" style="background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+                                <h4 style="font-size: 1em; color: #495057; margin-bottom: 10px;">고급 옵션</h4>
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px;">
+                                    <div>
+                                        <label for="defaultModelId">모델</label>
+                                        <select id="defaultModelId" name="modelId">
+                                            <option value="eleven_multilingual_v2">eleven_multilingual_v2</option>
+                                            <option value="eleven_turbo_v2">eleven_turbo_v2</option>
+                                        </select>
+                                        <small>음성 합성 모델</small>
+                                    </div>
+                                    <div>
+                                        <label for="defaultLanguageCode">언어</label>
+                                        <select id="defaultLanguageCode" name="languageCode">
+                                            <option value="">자동</option>
+                                            <option value="ko">한국어</option>
+                                            <option value="en">영어</option>
+                                            <option value="ja">일본어</option>
+                                            <option value="zh">중국어</option>
+                                            <option value="es">스페인어</option>
+                                            <option value="fr">프랑스어</option>
+                                            <option value="de">독일어</option>
+                                            <option value="it">이탈리아어</option>
+                                            <option value="pt">포르투갈어</option>
+                                            <option value="ru">러시아어</option>
+                                        </select>
+                                        <small>합성 언어</small>
+                                    </div>
+                                    <div>
+                                        <label for="defaultStability">Stability</label>
+                                        <input type="range" id="defaultStability" name="stability" min="0" max="1" step="0.01" value="0.5" oninput="this.nextElementSibling.value = this.value">
+                                        <output>0.5</output>
+                                        <small>음성 안정성 (0~1)</small>
+                                    </div>
+                                    <div>
+                                        <label for="defaultSimilarityBoost">Similarity</label>
+                                        <input type="range" id="defaultSimilarityBoost" name="similarityBoost" min="0" max="1" step="0.01" value="0.5" oninput="this.nextElementSibling.value = this.value">
+                                        <output>0.5</output>
+                                        <small>원본 음성 유사도 (0~1)</small>
+                                    </div>
+                                    <div>
+                                        <label for="defaultStyle">Style</label>
+                                        <input type="range" id="defaultStyle" name="style" min="0" max="1" step="0.01" value="0" oninput="this.nextElementSibling.value = this.value">
+                                        <output>0</output>
+                                        <small>스타일 강조 (0~1)</small>
+                                    </div>
+                                    <div>
+                                        <label for="defaultUseSpeakerBoost">Speaker Boost</label>
+                                        <input type="checkbox" id="defaultUseSpeakerBoost" name="useSpeakerBoost" checked>
+                                        <small>스피커 부스트</small>
+                                    </div>
+                                    <div>
+                                        <label for="defaultOutputFormat">출력 포맷</label>
+                                        <select id="defaultOutputFormat" name="outputFormat">
+                                            <option value="mp3_44100_128">mp3_44100_128</option>
+                                            <option value="mp3_44100_32">mp3_44100_32</option>
+                                            <option value="pcm_16000">pcm_16000</option>
+                                        </select>
+                                        <small>오디오 포맷</small>
+                                    </div>
+                                    <div>
+                                        <label for="defaultEnableLogging">로깅</label>
+                                        <input type="checkbox" id="defaultEnableLogging" name="enableLogging" checked>
+                                        <small>API 요청 로깅</small>
+                                    </div>
+                                    <div>
+                                        <label for="defaultOptimizeStreamingLatency">스트리밍 지연</label>
+                                        <select id="defaultOptimizeStreamingLatency" name="optimizeStreamingLatency">
+                                            <option value="">기본</option>
+                                            <option value="0">0 (최소)</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4 (최대)</option>
+                                        </select>
+                                        <small>지연 최적화</small>
+                                    </div>
+                                    <div>
+                                        <label for="defaultApplyTextNormalization">텍스트 정규화</label>
+                                        <select id="defaultApplyTextNormalization" name="applyTextNormalization">
+                                            <option value="auto">auto</option>
+                                            <option value="true">true</option>
+                                            <option value="false">false</option>
+                                        </select>
+                                        <small>텍스트 정규화</small>
+                                    </div>
+                                    <div>
+                                        <label for="defaultApplyLanguageTextNormalization">언어별 정규화</label>
+                                        <input type="checkbox" id="defaultApplyLanguageTextNormalization" name="applyLanguageTextNormalization">
+                                        <small>언어별 정규화 사용</small>
+                                    </div>
+                                    <div>
+                                        <label for="defaultSeed">Seed</label>
+                                        <input type="number" id="defaultSeed" name="seed" min="0" max="999999" placeholder="랜덤 시드">
+                                        <small>동일한 결과 재현용</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn">선택한 음성으로 TTS 생성</button>
+                        </form>
+                        <div id="defaultVoiceResult" class="result"></div>
+                        <audio id="defaultGeneratedAudio" controls style="display: none; width: 100%; margin-top: 20px;"></audio>
+                        <div id="defaultAudioUrl" style="display: none; margin-top: 20px;">
+                            <h4>🎵 생성된 음성 URL:</h4>
+                            <input type="text" id="defaultAudioUrlInput" readonly style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; background: #f9f9f9; font-size: 12px;">
+                            <button onclick="copyToClipboard('defaultAudioUrlInput')" class="btn" style="margin-top: 10px; padding: 8px 16px; font-size: 14px;">URL 복사</button>
+                            <button onclick="downloadDefaultAudio()" class="btn" style="margin-top: 10px; margin-left: 10px; padding: 8px 16px; font-size: 14px; background: #28a745;">MP3 다운로드</button>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- 사용자 TTS 탭 -->
@@ -705,6 +801,105 @@
                                     <label for="userFilename">파일명 (선택사항):</label>
                                     <input type="text" id="userFilename" name="filename" placeholder="예: my_voice_speech.mp3" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px;">
                                     <small style="color: #666; font-size: 12px;">파일명을 지정하지 않으면 기본값으로 저장됩니다.</small>
+                                </div>
+                                <!-- 고급 옵션 영역 -->
+                                <div class="form-group" style="background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+                                    <h4 style="font-size: 1em; color: #495057; margin-bottom: 10px;">고급 옵션</h4>
+                                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px;">
+                                        <div>
+                                            <label for="userModelId">모델</label>
+                                            <select id="userModelId" name="modelId">
+                                                <option value="eleven_multilingual_v2">eleven_multilingual_v2</option>
+                                                <option value="eleven_turbo_v2">eleven_turbo_v2</option>
+                                            </select>
+                                            <small>음성 합성 모델</small>
+                                        </div>
+                                        <div>
+                                            <label for="userLanguageCode">언어</label>
+                                            <select id="userLanguageCode" name="languageCode">
+                                                <option value="">자동</option>
+                                                <option value="ko">한국어</option>
+                                                <option value="en">영어</option>
+                                                <option value="ja">일본어</option>
+                                                <option value="zh">중국어</option>
+                                                <option value="es">스페인어</option>
+                                                <option value="fr">프랑스어</option>
+                                                <option value="de">독일어</option>
+                                                <option value="it">이탈리아어</option>
+                                                <option value="pt">포르투갈어</option>
+                                                <option value="ru">러시아어</option>
+                                            </select>
+                                            <small>합성 언어</small>
+                                        </div>
+                                        <div>
+                                            <label for="userStability">Stability</label>
+                                            <input type="range" id="userStability" name="stability" min="0" max="1" step="0.01" value="0.5" oninput="this.nextElementSibling.value = this.value">
+                                            <output>0.5</output>
+                                            <small>음성 안정성 (0~1)</small>
+                                        </div>
+                                        <div>
+                                            <label for="userSimilarityBoost">Similarity</label>
+                                            <input type="range" id="userSimilarityBoost" name="similarityBoost" min="0" max="1" step="0.01" value="0.5" oninput="this.nextElementSibling.value = this.value">
+                                            <output>0.5</output>
+                                            <small>원본 음성 유사도 (0~1)</small>
+                                        </div>
+                                        <div>
+                                            <label for="userStyle">Style</label>
+                                            <input type="range" id="userStyle" name="style" min="0" max="1" step="0.01" value="0" oninput="this.nextElementSibling.value = this.value">
+                                            <output>0</output>
+                                            <small>스타일 강조 (0~1)</small>
+                                        </div>
+                                        <div>
+                                            <label for="userUseSpeakerBoost">Speaker Boost</label>
+                                            <input type="checkbox" id="userUseSpeakerBoost" name="useSpeakerBoost" checked>
+                                            <small>스피커 부스트</small>
+                                        </div>
+                                        <div>
+                                            <label for="userOutputFormat">출력 포맷</label>
+                                            <select id="userOutputFormat" name="outputFormat">
+                                                <option value="mp3_44100_128">mp3_44100_128</option>
+                                                <option value="mp3_44100_32">mp3_44100_32</option>
+                                                <option value="pcm_16000">pcm_16000</option>
+                                            </select>
+                                            <small>오디오 포맷</small>
+                                        </div>
+                                        <div>
+                                            <label for="userEnableLogging">로깅</label>
+                                            <input type="checkbox" id="userEnableLogging" name="enableLogging" checked>
+                                            <small>API 요청 로깅</small>
+                                        </div>
+                                        <div>
+                                            <label for="userOptimizeStreamingLatency">스트리밍 지연</label>
+                                            <select id="userOptimizeStreamingLatency" name="optimizeStreamingLatency">
+                                                <option value="">기본</option>
+                                                <option value="0">0 (최소)</option>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4 (최대)</option>
+                                            </select>
+                                            <small>지연 최적화</small>
+                                        </div>
+                                        <div>
+                                            <label for="userApplyTextNormalization">텍스트 정규화</label>
+                                            <select id="userApplyTextNormalization" name="applyTextNormalization">
+                                                <option value="auto">auto</option>
+                                                <option value="true">true</option>
+                                                <option value="false">false</option>
+                                            </select>
+                                            <small>텍스트 정규화</small>
+                                        </div>
+                                        <div>
+                                            <label for="userApplyLanguageTextNormalization">언어별 정규화</label>
+                                            <input type="checkbox" id="userApplyLanguageTextNormalization" name="applyLanguageTextNormalization">
+                                            <small>언어별 정규화 사용</small>
+                                        </div>
+                                        <div>
+                                            <label for="userSeed">Seed</label>
+                                            <input type="number" id="userSeed" name="seed" min="0" max="999999" placeholder="랜덤 시드">
+                                            <small>동일한 결과 재현용</small>
+                                        </div>
+                                    </div>
                                 </div>
                                 <button type="submit" class="btn">사용자 음성으로 TTS 생성</button>
                             </form>
@@ -1125,7 +1320,18 @@
                 
                 if (result.success) {
                     document.getElementById('voiceId').value = result.voiceId;
-                    // 목록 자동 새로고침 제거 - 사용자가 필요시에만 새로고침 버튼 사용
+                    
+                    // 성공 메시지에 자동 새로고침 안내 추가
+                    showResult('createModelResult', true, result.message + '\n\n🔄 사용자 음성 목록을 자동으로 새로고침했습니다!');
+                    
+                    // 사용자 음성 목록 자동 새로고침
+                    await loadUserVoicesForDropdown();
+                    
+                    // 새로 생성된 음성을 자동으로 선택
+                    if (result.voiceId) {
+                        const userVoiceSelect = document.getElementById('userVoiceSelect');
+                        userVoiceSelect.value = result.voiceId;
+                    }
                 }
             } catch (error) {
                 showResult('createModelResult', false, '오류가 발생했습니다: ' + error.message);
@@ -1134,7 +1340,7 @@
             }
         });
 
-        // 기본 음성 TTS 생성
+        // 기본 음성 TTS 생성 (고급 옵션 지원)
         document.getElementById('defaultVoiceForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             showLoading(true);
@@ -1142,6 +1348,33 @@
             const formData = new FormData();
             formData.append('voiceId', document.getElementById('defaultVoiceSelect').value);
             formData.append('text', document.getElementById('defaultTextToSpeech').value);
+
+            // 고급 옵션들 추가
+            const modelId = document.getElementById('defaultModelId')?.value;
+            const languageCode = document.getElementById('defaultLanguageCode')?.value;
+            const stability = document.getElementById('defaultStability')?.value;
+            const similarityBoost = document.getElementById('defaultSimilarityBoost')?.value;
+            const style = document.getElementById('defaultStyle')?.value;
+            const useSpeakerBoost = document.getElementById('defaultUseSpeakerBoost')?.checked;
+            const outputFormat = document.getElementById('defaultOutputFormat')?.value;
+            const enableLogging = document.getElementById('defaultEnableLogging')?.checked;
+            const optimizeStreamingLatency = document.getElementById('defaultOptimizeStreamingLatency')?.value;
+            const applyTextNormalization = document.getElementById('defaultApplyTextNormalization')?.value;
+            const applyLanguageTextNormalization = document.getElementById('defaultApplyLanguageTextNormalization')?.checked;
+            const seed = document.getElementById('defaultSeed')?.value;
+
+            if (modelId) formData.append('modelId', modelId);
+            if (languageCode) formData.append('languageCode', languageCode);
+            if (stability) formData.append('stability', stability);
+            if (similarityBoost) formData.append('similarityBoost', similarityBoost);
+            if (style) formData.append('style', style);
+            if (useSpeakerBoost !== undefined) formData.append('useSpeakerBoost', useSpeakerBoost);
+            if (outputFormat) formData.append('outputFormat', outputFormat);
+            if (enableLogging !== undefined) formData.append('enableLogging', enableLogging);
+            if (optimizeStreamingLatency) formData.append('optimizeStreamingLatency', optimizeStreamingLatency);
+            if (applyTextNormalization) formData.append('applyTextNormalization', applyTextNormalization);
+            if (applyLanguageTextNormalization !== undefined) formData.append('applyLanguageTextNormalization', applyLanguageTextNormalization);
+            if (seed) formData.append('seed', seed);
 
             try {
                 const response = await fetch(`${API_BASE}/generate-speech`, {
@@ -1157,6 +1390,13 @@
                     audio.src = result.audioUrl;
                     audio.style.display = 'block';
                     
+                    // 자동 재생
+                    audio.play().catch(error => {
+                        console.log('자동 재생 실패 (브라우저 정책):', error);
+                        // 자동 재생이 실패하면 사용자에게 알림
+                        showResult('defaultVoiceResult', true, '기본 음성으로 TTS가 성공적으로 생성되었습니다! 재생 버튼을 클릭하여 음성을 들을 수 있습니다.');
+                    });
+                    
                     // URL 표시
                     const urlInput = document.getElementById('defaultAudioUrlInput');
                     urlInput.value = result.audioUrl;
@@ -1166,7 +1406,15 @@
                     window.defaultAudioData = result.audioData;
                     window.defaultAudioFilename = document.getElementById('defaultFilename').value || 'default_speech.mp3';
                     
-                    showResult('defaultVoiceResult', true, '기본 음성으로 TTS가 성공적으로 생성되었습니다!');
+                    // 사용된 옵션 표시
+                    if (result.options && Object.keys(result.options).length > 0) {
+                        const optionsInfo = document.createElement('div');
+                        optionsInfo.className = 'mt-2 p-2 bg-light rounded';
+                        optionsInfo.innerHTML = '<small><strong>사용된 옵션:</strong> ' + JSON.stringify(result.options, null, 2) + '</small>';
+                        document.getElementById('defaultVoiceResult').appendChild(optionsInfo);
+                    }
+                    
+                    showResult('defaultVoiceResult', true, '기본 음성으로 TTS가 성공적으로 생성되었습니다! 음성이 자동으로 재생됩니다.');
                 } else {
                     showResult('defaultVoiceResult', false, result.message || '기본 음성 TTS 생성에 실패했습니다.');
                 }
@@ -1177,7 +1425,7 @@
             }
         });
 
-        // 사용자 음성 TTS 생성
+        // 사용자 음성 TTS 생성 (고급 옵션 지원)
         document.getElementById('generateSpeechForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             showLoading(true);
@@ -1185,6 +1433,33 @@
             const formData = new FormData();
             formData.append('voiceId', document.getElementById('voiceId').value);
             formData.append('text', document.getElementById('textToSpeech').value);
+
+            // 고급 옵션들 추가 (사용자 TTS용 옵션 ID들)
+            const modelId = document.getElementById('userModelId')?.value;
+            const languageCode = document.getElementById('userLanguageCode')?.value;
+            const stability = document.getElementById('userStability')?.value;
+            const similarityBoost = document.getElementById('userSimilarityBoost')?.value;
+            const style = document.getElementById('userStyle')?.value;
+            const useSpeakerBoost = document.getElementById('userUseSpeakerBoost')?.checked;
+            const outputFormat = document.getElementById('userOutputFormat')?.value;
+            const enableLogging = document.getElementById('userEnableLogging')?.checked;
+            const optimizeStreamingLatency = document.getElementById('userOptimizeStreamingLatency')?.value;
+            const applyTextNormalization = document.getElementById('userApplyTextNormalization')?.value;
+            const applyLanguageTextNormalization = document.getElementById('userApplyLanguageTextNormalization')?.checked;
+            const seed = document.getElementById('userSeed')?.value;
+
+            if (modelId) formData.append('modelId', modelId);
+            if (languageCode) formData.append('languageCode', languageCode);
+            if (stability) formData.append('stability', stability);
+            if (similarityBoost) formData.append('similarityBoost', similarityBoost);
+            if (style) formData.append('style', style);
+            if (useSpeakerBoost !== undefined) formData.append('useSpeakerBoost', useSpeakerBoost);
+            if (outputFormat) formData.append('outputFormat', outputFormat);
+            if (enableLogging !== undefined) formData.append('enableLogging', enableLogging);
+            if (optimizeStreamingLatency) formData.append('optimizeStreamingLatency', optimizeStreamingLatency);
+            if (applyTextNormalization) formData.append('applyTextNormalization', applyTextNormalization);
+            if (applyLanguageTextNormalization !== undefined) formData.append('applyLanguageTextNormalization', applyLanguageTextNormalization);
+            if (seed) formData.append('seed', seed);
 
             try {
                 const response = await fetch(`${API_BASE}/generate-speech`, {
@@ -1200,6 +1475,13 @@
                     audio.src = result.audioUrl;
                     audio.style.display = 'block';
                     
+                    // 자동 재생
+                    audio.play().catch(error => {
+                        console.log('자동 재생 실패 (브라우저 정책):', error);
+                        // 자동 재생이 실패하면 사용자에게 알림
+                        showResult('generateSpeechResult', true, '사용자 음성으로 TTS가 성공적으로 생성되었습니다! 재생 버튼을 클릭하여 음성을 들을 수 있습니다.');
+                    });
+                    
                     // URL 표시
                     const urlInput = document.getElementById('userAudioUrlInput');
                     urlInput.value = result.audioUrl;
@@ -1209,7 +1491,15 @@
                     window.userAudioData = result.audioData;
                     window.userAudioFilename = document.getElementById('userFilename').value || 'user_speech.mp3';
                     
-                    showResult('generateSpeechResult', true, '사용자 음성으로 TTS가 성공적으로 생성되었습니다!');
+                    // 사용된 옵션 표시
+                    if (result.options && Object.keys(result.options).length > 0) {
+                        const optionsInfo = document.createElement('div');
+                        optionsInfo.className = 'mt-2 p-2 bg-light rounded';
+                        optionsInfo.innerHTML = '<small><strong>사용된 옵션:</strong> ' + JSON.stringify(result.options, null, 2) + '</small>';
+                        document.getElementById('generateSpeechResult').appendChild(optionsInfo);
+                    }
+                    
+                    showResult('generateSpeechResult', true, '사용자 음성으로 TTS가 성공적으로 생성되었습니다! 음성이 자동으로 재생됩니다.');
                 } else {
                     showResult('generateSpeechResult', false, result.message || '사용자 음성 TTS 생성에 실패했습니다.');
                 }
@@ -1229,6 +1519,7 @@
             const userVoiceSelect = document.getElementById('userVoiceSelect');
             if (voiceSelect.children.length <= 1 || userVoiceSelect.children.length <= 1) { // 옵션이 1개 이하일 때만 로드
                 loadVoices();
+                loadUserVoicesForDropdown();
             }
         }
 
@@ -1403,19 +1694,26 @@
                 
                 // 계정 정보 표시
                 const infoHtml = `
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
                         <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
                             <h4 style="color: #495057; margin: 0 0 10px 0;">👤 계정 정보</h4>
+                            <p><strong>사용자 ID:</strong> ${userInfo.user_id || '알 수 없음'}</p>
+                            <p><strong>이름:</strong> ${userInfo.first_name || '알 수 없음'}</p>
                             <p><strong>계정 유형:</strong> ${userInfo.subscription?.tier || '무료'}</p>
-                            <p><strong>가입일:</strong> ${userInfo.subscription?.created_at ? new Date(userInfo.subscription.created_at * 1000).toLocaleDateString() : '알 수 없음'}</p>
-                            <p><strong>다음 결제일:</strong> ${userInfo.subscription?.next_character_count_reset_unix ? new Date(userInfo.subscription.next_character_count_reset_unix * 1000).toLocaleDateString() : '알 수 없음'}</p>
+                            <p><strong>계정 상태:</strong> ${userInfo.subscription?.status || '알 수 없음'}</p>
+                            <p><strong>신규 사용자:</strong> ${userInfo.is_new_user ? '예' : '아니오'}</p>
+                            <p><strong>온보딩 완료:</strong> ${userInfo.is_onboarding_completed ? '완료' : '미완료'}</p>
                         </div>
                         
                         <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
                             <h4 style="color: #495057; margin: 0 0 10px 0;">🎤 음성 모델</h4>
-                            <p><strong>생성된 음성 모델:</strong> ${userInfo.subscription?.voice_limit || '알 수 없음'}개</p>
-                            <p><strong>음성 모델 한도:</strong> ${userInfo.subscription?.can_extend_voice_limit ? '확장 가능' : '한도 도달'}</p>
-                            <p><strong>음성 모델 삭제:</strong> ${userInfo.subscription?.can_use_instant_voice_cloning ? '가능' : '불가능'}</p>
+                            <p><strong>사용 중인 음성 모델:</strong> ${userInfo.subscription?.voice_slots_used || 0}개</p>
+                            <p><strong>음성 모델 한도:</strong> ${userInfo.subscription?.voice_limit || 0}개</p>
+                            <p><strong>전문 음성 사용:</strong> ${userInfo.subscription?.professional_voice_slots_used || 0}개</p>
+                            <p><strong>전문 음성 한도:</strong> ${userInfo.subscription?.professional_voice_limit || 0}개</p>
+                            <p><strong>음성 모델 확장:</strong> ${userInfo.subscription?.can_extend_voice_limit ? '가능' : '불가능'}</p>
+                            <p><strong>즉시 음성 복제:</strong> ${userInfo.subscription?.can_use_instant_voice_cloning ? '가능' : '불가능'}</p>
+                            <p><strong>전문 음성 복제:</strong> ${userInfo.subscription?.can_use_professional_voice_cloning ? '가능' : '불가능'}</p>
                         </div>
                         
                         <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
@@ -1423,17 +1721,40 @@
                             <p><strong>이번 달 사용:</strong> ${userInfo.subscription?.character_count || 0}자</p>
                             <p><strong>이번 달 한도:</strong> ${userInfo.subscription?.character_limit || 0}자</p>
                             <p><strong>남은 사용량:</strong> ${(userInfo.subscription?.character_limit || 0) - (userInfo.subscription?.character_count || 0)}자</p>
+                            <p><strong>문자 수 확장:</strong> ${userInfo.subscription?.can_extend_character_limit ? '가능' : '불가능'}</p>
+                            <p><strong>문자 수 확장 허용:</strong> ${userInfo.subscription?.allowed_to_extend_character_limit ? '예' : '아니오'}</p>
+                            <p><strong>최대 확장 가능:</strong> ${userInfo.subscription?.max_character_limit_extension || 0}자</p>
+                            <p><strong>다음 리셋일:</strong> ${userInfo.subscription?.next_character_count_reset_unix ? new Date(userInfo.subscription.next_character_count_reset_unix * 1000).toLocaleDateString() : '알 수 없음'}</p>
                         </div>
                         
                         <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
-                            <h4 style="color: #495057; margin: 0 0 10px 0;">💡 한도 정보</h4>
-                            <p><strong>무료 계정:</strong> 월 10,000자</p>
-                            <p><strong>Starter:</strong> 월 30,000자</p>
-                            <p><strong>Creator:</strong> 월 250,000자</p>
-                            <p><strong>Independent Publisher:</strong> 월 1,000,000자</p>
-                            <p><strong>Growing Business:</strong> 월 2,500,000자</strong></p>
+                            <h4 style="color: #495057; margin: 0 0 10px 0;">🔧 기타 정보</h4>
+                            <p><strong>음성 편집 카운터:</strong> ${userInfo.subscription?.voice_add_edit_counter || 0}회</p>
+                            <p><strong>최대 음성 편집:</strong> ${userInfo.subscription?.max_voice_add_edits || 0}회</p>
+                            <p><strong>결제 주기:</strong> ${userInfo.subscription?.billing_period === 'monthly_period' ? '월간' : userInfo.subscription?.billing_period || '알 수 없음'}</p>
+                            <p><strong>문자 리프레시 주기:</strong> ${userInfo.subscription?.character_refresh_period === 'monthly_period' ? '월간' : userInfo.subscription?.character_refresh_period || '알 수 없음'}</p>
+                            <p><strong>통화:</strong> ${userInfo.subscription?.currency || '알 수 없음'}</p>
                         </div>
                     </div>
+                    
+                    ${userInfo.subscription_extras ? `
+                    <div style="margin-top: 20px; padding: 15px; background: #fff3cd; border-radius: 8px;">
+                        <h5 style="color: #856404; margin: 0 0 10px 0;">🚀 고급 기능</h5>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                            <div>
+                                <p><strong>동시 처리:</strong> ${userInfo.subscription_extras.concurrency || 0}개</p>
+                                <p><strong>ConvAI 동시 처리:</strong> ${userInfo.subscription_extras.convai_concurrency || 0}개</p>
+                                <p><strong>ConvAI 분당 문자:</strong> ${userInfo.subscription_extras.convai_chars_per_minute || 0}자</p>
+                                <p><strong>ConvAI ASR 분당 문자:</strong> ${userInfo.subscription_extras.convai_asr_chars_per_minute || 0}자</p>
+                            </div>
+                            <div>
+                                <p><strong>강제 로깅 비활성화:</strong> ${userInfo.subscription_extras.force_logging_disabled ? '예' : '아니오'}</p>
+                                <p><strong>수동 Pro 음성 검증 요청:</strong> ${userInfo.subscription_extras.can_request_manual_pro_voice_verification ? '가능' : '불가능'}</p>
+                                <p><strong>음성 캡차 우회:</strong> ${userInfo.subscription_extras.can_bypass_voice_captcha ? '가능' : '불가능'}</p>
+                            </div>
+                        </div>
+                    </div>
+                    ` : ''}
                     
                     <div style="margin-top: 20px; padding: 15px; background: #e7f3ff; border-radius: 8px;">
                         <h5 style="color: #0d6efd; margin: 0 0 10px 0;">📋 ElevenLabs 플랜별 음성 모델 한도</h5>
@@ -1455,6 +1776,33 @@
                 showResult('userInfoResult', false, '사용자 정보 로드에 실패했습니다: ' + error.message);
             } finally {
                 showLoading(false);
+            }
+        }
+
+        async function loadUserVoicesForDropdown() {
+            try {
+                const response = await fetch(`${API_BASE}/user-voices`);
+                const voices = await response.json();
+                
+                // 사용자 음성 선택 드롭다운 업데이트
+                const userVoiceSelect = document.getElementById('userVoiceSelect');
+                userVoiceSelect.innerHTML = '<option value="">사용자 음성을 선택하세요...</option>';
+
+                if (voices.voices && voices.voices.length > 0) {
+                    // 사용자 생성 음성만 필터링 (category가 'cloned'인 것들)
+                    const userVoices = voices.voices.filter(voice => voice.category === 'cloned');
+                    
+                    if (userVoices.length > 0) {
+                        userVoices.forEach(voice => {
+                            const option = document.createElement('option');
+                            option.value = voice.voice_id;
+                            option.textContent = `${voice.name} (${voice.voice_id})`;
+                            userVoiceSelect.appendChild(option);
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error('사용자 음성 드롭다운 로드 실패:', error);
             }
         }
 
@@ -1608,7 +1956,10 @@
         }
 
         // 페이지 로드 시 음성 목록 로드
-        window.addEventListener('load', loadVoices);
+        window.addEventListener('load', function() {
+            loadVoices();
+            loadUserVoicesForDropdown();
+        });
 
         async function loadTtsHistory() {
             showLoading(true);
