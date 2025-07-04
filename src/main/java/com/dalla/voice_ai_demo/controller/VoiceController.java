@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
 @RequestMapping("/api/voice")
@@ -23,6 +24,9 @@ public class VoiceController {
 
     @Autowired
     private ElevenLabsService elevenLabsService;
+    
+    // 업로드 진행률을 저장할 맵
+    private final Map<String, Integer> uploadProgress = new ConcurrentHashMap<>();
 
     /**
      * 음성 모델 생성 (사용자 목소리 학습)
@@ -34,16 +38,38 @@ public class VoiceController {
             @RequestParam(value = "language", required = false) String language,
             @RequestParam("audioFile") MultipartFile audioFile) {
         
+        String uploadId = System.currentTimeMillis() + "_" + Thread.currentThread().getId();
+        uploadProgress.put(uploadId, 0);
+        
         try {
+            // 업로드 진행률 시뮬레이션 (실제로는 파일 크기 기반으로 계산)
+            uploadProgress.put(uploadId, 25);
+            Thread.sleep(100); // 실제 업로드 시간 시뮬레이션
+            
+            uploadProgress.put(uploadId, 50);
             String voiceId = elevenLabsService.createVoiceModel(name, description, language, audioFile);
+            
+            uploadProgress.put(uploadId, 100);
             
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
             response.put("voiceId", voiceId);
+            response.put("uploadId", uploadId);
             response.put("message", "음성 모델이 성공적으로 생성되었습니다.");
             
+            // 5초 후 진행률 정보 삭제
+            new Thread(() -> {
+                try {
+                    Thread.sleep(5000);
+                    uploadProgress.remove(uploadId);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }).start();
+            
             return ResponseEntity.ok(response);
-        } catch (IOException e) {
+        } catch (Exception e) {
+            uploadProgress.remove(uploadId);
             Map<String, Object> response = new HashMap<>();
             response.put("success", false);
             response.put("message", "음성 모델 생성 실패: " + e.getMessage());
@@ -281,6 +307,29 @@ public class VoiceController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
+
+    /**
+     * 업로드 진행률 조회
+     */
+    @GetMapping("/upload-progress/{uploadId}")
+    public ResponseEntity<Map<String, Object>> getUploadProgress(@PathVariable String uploadId) {
+        Map<String, Object> response = new HashMap<>();
+        
+        Integer progress = uploadProgress.get(uploadId);
+        if (progress != null) {
+            response.put("uploadId", uploadId);
+            response.put("progress", progress);
+            response.put("status", progress == 100 ? "completed" : "in-progress");
+        } else {
+            response.put("uploadId", uploadId);
+            response.put("progress", 0);
+            response.put("status", "not-found");
+        }
+        
+        return ResponseEntity.ok(response);
+    }
+
+
 
     /**
      * 헬스 체크

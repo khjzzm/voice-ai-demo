@@ -1,0 +1,38 @@
+# Git 관련
+.git
+.gitignore
+.gitattributes
+
+# IDE 관련
+.idea
+*.iml
+.vscode
+*.swp
+*.swo
+
+# OS 관련
+.DS_Store
+Thumbs.db
+
+# 로그 파일
+*.log
+
+# 임시 파일
+*.tmp
+*.temp
+
+# 빌드 결과물 (Docker 내에서 다시 빌드)
+build/
+.gradle/
+
+# 테스트 관련
+src/test/
+
+# 문서
+README.md
+HELP.md
+*.md
+
+# 기타
+*.bak
+*.orig 
